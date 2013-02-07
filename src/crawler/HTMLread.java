@@ -1,5 +1,6 @@
 package crawler;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -15,21 +16,21 @@ public class HTMLread {
 	public static boolean readUntil(InputStream is, char ch1, char ch2) {
 		// consumes characters from is, and stops when either ch1 or ch2 is
 		// encountered. Ignore case
-		Reader reader = new InputStreamReader(is);
+		BufferedReader breader = new BufferedReader(new InputStreamReader(is));
 		int data;
 		try {
-			data = reader.read();
+			data = breader.read();
 			// WE NEED TO CHECK WHY THIS IS -1
 			while (data != -1) {
 				char ch = Character.toLowerCase((char) data);
 				if (ch == (Character.toLowerCase(ch1))) {
-					reader.close();
+					breader.close();
 					return true;
 				} else if (ch == (Character.toLowerCase(ch2))) {
 					break;
 				}
-				data = reader.read();
-				reader.close();
+				data = breader.read();
+				breader.close();
 				return false;
 			}
 
@@ -47,15 +48,15 @@ public class HTMLread {
 		// (use constant Java provides!)
 		// otherwise return the non-whitespace char that was read
 
-		Reader reader = new InputStreamReader(is);
+		BufferedReader breader = new BufferedReader(new InputStreamReader(is));
 		int data;
 		try {
-			data = reader.read();
+			data = breader.read();
 			// WE NEED TO CHECK WHY THIS IS -1
 			while (data != -1) {
 				if (!Character.isWhitespace((char) data)) {
 					if ((char) data == ch) {
-						reader.close();
+						breader.close();
 						return Character.MIN_VALUE;
 					}
 
@@ -77,20 +78,20 @@ public class HTMLread {
 		// consumes characters and stops when it hits ch1 or ch2. This method
 		// does not ignore case
 		// encountered. Ignore case
-		Reader reader = new InputStreamReader(is);
+		BufferedReader breader = new BufferedReader(new InputStreamReader(is));
 		int data;
 		// IMplement a StringBuffer here!
 		String s = "";
 		try {
-			data = reader.read();
+			data = breader.read();
 			// WE NEED TO CHECK WHY THIS IS -1
 			while (data != -1) {
 				char ch = (char) data;
 				if (ch == ch1) {
-					reader.close();
+					breader.close();
 					return s;
 				} else if (ch == ch2) {
-					reader.close();
+					breader.close();
 					return null;
 				}
 
