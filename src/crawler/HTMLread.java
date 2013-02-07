@@ -5,8 +5,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import java.io.Reader;
-
 public class HTMLread {
 
 	public HTMLread() {
@@ -27,18 +25,21 @@ public class HTMLread {
 					breader.close();
 					return true;
 				} else if (ch == (Character.toLowerCase(ch2))) {
-					break;
+					breader.close();
+					return false;
 				}
 				data = breader.read();
-				breader.close();
-				return false;
 			}
+			breader.close();
+			return false;
 
 		} catch (IOException e) {
 
 			System.out.println("File cannot be read: " + e);
+			// THIS IS BAD - I think we should be throwing an exception to the
+			// calling method
+			return false;
 		}
-		return false;
 
 	}
 
@@ -59,15 +60,13 @@ public class HTMLread {
 						breader.close();
 						return Character.MIN_VALUE;
 					}
-
 				}
-
+				data = breader.read();
 			}
+			breader.close();
 			return (char) data;
 		} catch (IOException e) {
-
 			System.out.println("File cannot be read: " + e);
-
 			// FIND ANOTHER WAY OF RETURNING THIS
 			return 0;
 		}
@@ -94,9 +93,10 @@ public class HTMLread {
 					breader.close();
 					return null;
 				}
-
 				s += (char) data;
+				data = breader.read();
 			}
+			breader.close();
 			return s;
 		} catch (IOException e) {
 			System.out.println("File cannot be read: " + e);
