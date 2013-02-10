@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Reader;
 
 public class HTMLread {
 
@@ -14,33 +15,28 @@ public class HTMLread {
 	public static boolean readUntil(InputStream is, char ch1, char ch2) {
 		// consumes characters from is, and stops when either ch1 or ch2 is
 		// encountered. Ignore case
-		BufferedReader breader = new BufferedReader(new InputStreamReader(is));
-		int data;
+		BufferedReader bReader = new BufferedReader(new InputStreamReader(is));
+		boolean returnBool = false;
 		try {
-			data = breader.read();
+			int data = bReader.read();
 			// WE NEED TO CHECK WHY THIS IS -1
 			while (data != -1) {
 				char ch = Character.toLowerCase((char) data);
 				if (ch == (Character.toLowerCase(ch1))) {
-					breader.close();
-					return true;
+					returnBool = true;
+					break;
 				} else if (ch == (Character.toLowerCase(ch2))) {
-					breader.close();
-					return false;
+					returnBool = false;
+					break;
 				}
-				data = breader.read();
+				data = bReader.read();
 			}
-			breader.close();
-			return false;
-
 		} catch (IOException e) {
-
 			System.out.println("File cannot be read: " + e);
-			// THIS IS BAD - I think we should be throwing an exception to the
-			// calling method
-			return false;
+		} finally {
+			closeReader(bReader);
 		}
-
+		return returnBool;
 	}
 
 	public static char skipSpace(InputStream is, char ch) {
@@ -49,63 +45,64 @@ public class HTMLread {
 		// (use constant Java provides!)
 		// otherwise return the non-whitespace char that was read
 
-		BufferedReader breader = new BufferedReader(new InputStreamReader(is));
-		int data;
+		BufferedReader bReader = new BufferedReader(new InputStreamReader(is));
+		char returnChar = Character.MIN_VALUE;
 		try {
-			data = breader.read();
+			int data = bReader.read();
 			// WE NEED TO CHECK WHY THIS IS -1
 			while (data != -1) {
 				if (!Character.isWhitespace((char) data)) {
-					if ((char) data == ch) {
-						breader.close();
-						return Character.MIN_VALUE;
-					}
+					returnChar = ((char) data == ch) ? Character.MIN_VALUE
+							: (char) data;
+					break;
 				}
-				data = breader.read();
+				data = bReader.read();
 			}
-			breader.close();
-			return (char) data;
 		} catch (IOException e) {
 			System.out.println("File cannot be read: " + e);
-			// FIND ANOTHER WAY OF RETURNING THIS
-			return 0;
+		} finally {
+			closeReader(bReader);
 		}
-
+		return returnChar;
 	}
 
 	public static String readString(InputStream is, char ch1, char ch2) {
 		// consumes characters and stops when it hits ch1 or ch2. This method
 		// does not ignore case
 		// encountered. Ignore case
-		BufferedReader breader = new BufferedReader(new InputStreamReader(is));
+		BufferedReader bReader = new BufferedReader(new InputStreamReader(is));
 		int data;
 		// IMplement a StringBuffer here!
-		String s = "";
+		String returnString = "";
 		try {
-			data = breader.read();
-			// WE NEED TO CHECK WHY THIS IS -1
-			while (data != -1) {
+			while ((data = bReader.read()) != -1) {
 				char ch = (char) data;
 				if (ch == ch1) {
-					breader.close();
-					return s;
+					break;
 				} else if (ch == ch2) {
-					breader.close();
-					return null;
+					returnString = null;
+					break;
 				}
-				s += (char) data;
-				data = breader.read();
+				returnString += (char) data;
 			}
-			breader.close();
-			return s;
 		} catch (IOException e) {
 			System.out.println("File cannot be read: " + e);
-			return "";
-
+			// return "";
+		} finally {
+			closeReader(bReader);
 		}
-
+		return returnString;
 	}
 
+	public static void closeReader(Reader reader) {
+		try {
+			if (reader != null) {
+				reader.close();
+			}
+		} catch (IOException e) {
+			System.out.println("Could not close reader: " + e);
+		}
+	}
 }
 
 // */
