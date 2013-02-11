@@ -6,24 +6,30 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class WebCrawler {
 
+	private LinkedList<String[]> tempTable;
 	// public void HTMLParser() {
+	
+	public WebCrawler() {
+		tempTable = new LinkedList<>();
 
-	public ArrayList<String> HTMLParser() {
+
+	}
+
+	public void parsePage(String priority, String page) {
 		// parses HTML commands from a stream
-		ArrayList<String> list = new ArrayList<>();
 		try {
-			URL url = new URL("http://www.bbc.co.uk");
+			URL url = new URL(page);
 			Reader br = new BufferedReader(new InputStreamReader(
 					url.openStream()));
 			while (HTMLread.readUntil(br, '<', -1)) {
 				if (checkForString(br, "ahref=")) {
 					HTMLread.readUntil(br, '\'', '"');
 					if (checkForString(br, "http")) {
-						list.add("http"+HTMLread.readString(br, '"', '\''));
+						tempTable.add(new String[]{priority, "http"+HTMLread.readString(br, '"', '\'')});
 					}
 				}
 			}
@@ -40,7 +46,6 @@ public class WebCrawler {
 		} finally {
 
 		}
-		return list;
 	}
 
 	public boolean checkForString(Reader r, String s) {
@@ -72,11 +77,23 @@ public class WebCrawler {
 	public static void main(String[] args) {
 		System.out.println("Hello this is a webcrawler!");
 		WebCrawler wc = new WebCrawler();
-		ArrayList<String> list = wc.HTMLParser();
-		for (String s : list) {
-			System.out.println("Link: " + s);
+		//wc.parsePage();
+		String startURL = "http://www.pundarika.co.uk";
+		wc.tempTable.add(new String[]{"0",startURL});
+		wc.parsePage("1",startURL);
+		for (String[] s : wc.tempTable) {
+			System.out.println(s[0] + ": "+ s[1]);
 		}
-
+		for (int i=0;i<wc.tempTable.size();i++) {
+			if (wc.tempTable.get(i)[0]=="1") {
+				String currentURL = wc.tempTable.get(i)[1];
+				wc.parsePage("2",currentURL);
+				wc.tempTable.set(i, new String[]{"0",currentURL});
+			} 
+		}
+		for (String[] s : wc.tempTable) {
+			System.out.println(s[0] + ": "+ s[1]);
+		}
 	}
 
 }
