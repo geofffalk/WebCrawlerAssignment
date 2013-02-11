@@ -1,11 +1,8 @@
 package crawler;
 
-import java.io.BufferedInputStream;
-import java.io.InputStream;
-import java.io.Reader;
 
+import java.io.Reader;
 import java.io.IOException;
-import java.net.URL;
 
 public class HTMLread {
 
