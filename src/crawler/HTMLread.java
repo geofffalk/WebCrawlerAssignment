@@ -18,6 +18,8 @@ public class HTMLread {
 	 * 
 	 * @return boolean that shows if ch1 or ch2 has been encountered
 	 */
+	
+	//CHECK INT INSTEAD OF CHAR HERE
 	public static boolean readUntil(Reader is, char ch1, int ch2) {
 		boolean returnBool = false;
 		try {
