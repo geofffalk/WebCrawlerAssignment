@@ -22,11 +22,6 @@ public class HTMLread {
 		boolean returnBool = false;
 		try {
 			int data = is.read();
-			// Checked this and answer is: The read() method of an
-			// InputStreamReader returns an int which contains
-			// the char value of the char read. If the read() method returns -1,
-			// there is no more data to read in the InputStreamReader,
-			// and it can be closed.
 			while (data != ch2) {
 				char ch = Character.toLowerCase((char) data);
 				if (ch == (Character.toLowerCase(ch1))) {
@@ -98,17 +93,13 @@ public class HTMLread {
 				if (ch == ch1) {
 					break;
 				} else if (ch == ch2) {
-					// returnString = null;
 					return null;
-					// break;
 				}
 				output.append((char) data);
-				// returnString += (char) data;
 			}
 
 		} catch (IOException e) {
 			System.out.println("File cannot be read: " + e);
-			// return "";
 		}
 		return output.toString();
 	}

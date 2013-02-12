@@ -77,8 +77,7 @@ public class WebCrawler {
 	public static void main(String[] args) {
 		System.out.println("Hello this is a webcrawler!");
 		WebCrawler wc = new WebCrawler();
-		//wc.parsePage();
-		String startURL = "http://www.pundarika.co.uk";
+		String startURL = "http://www.bbc.co.uk";
 		wc.tempTable.add(new String[]{"0",startURL});
 		wc.parsePage("1",startURL);
 		for (String[] s : wc.tempTable) {
